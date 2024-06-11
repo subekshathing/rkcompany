@@ -1,6 +1,7 @@
 import express from "express";
 import connectDB from "./connect.db.js";
 import userRoutes from "./src/user/user.routes.js";
+import productRoutes from "./src/products/product.routes.js";
 
 const app = express();
 
@@ -18,11 +19,11 @@ app.use(express.json());
 // app.use(cors(corsOptions));
 
 // connect database
-await connectDB();
+connectDB();
 
 // register routes
 app.use(userRoutes);
-// app.use(productRoutes);
+app.use(productRoutes);
 // app.use(cartRoutes);
 
 // network port and server
