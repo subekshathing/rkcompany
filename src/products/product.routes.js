@@ -264,4 +264,65 @@ router.post(
       .send({ message: "success", productList: products, totalPage });
   }
 );
+
+router.post("/product/list", async (req, res) => {
+  // extract pagination data from req.body
+  const { page, limit, searchText, category, minPrice, maxPrice } = req.body;
+
+  console.log({ page, limit, searchText, category, minPrice, maxPrice });
+
+  const skip = (page - 1) * limit;
+
+  let match = {};
+
+  if (searchText) {
+    match = { name: { $regex: searchText, $options: "i" } };
+  }
+
+  if (category) {
+    match = { ...match, category: category };
+  }
+
+  if (minPrice && maxPrice && maxPrice < minPrice) {
+    return res
+      .status(409)
+      .send({ message: "Min price cannot be greater than max price." });
+  }
+
+  if (minPrice || maxPrice) {
+    match = { ...match, price: { $gte: minPrice, $lte: maxPrice } };
+  }
+
+  console.log(match);
+  const products = await Product.aggregate([
+    {
+      $match: match
+    },
+    {
+      $skip: skip
+    },
+    { $limit: limit },
+    {
+      $project: {
+        name: 1,
+        brand: 1,
+        price: 1,
+        category: 1,
+        freeShipping: 1,
+        availableQuantity: 1,
+        description: { $substr: ["$description", 0, 200] },
+        image: 1
+      }
+    }
+  ]);
+
+  // total products
+  const totalProducts = await Product.find(match).countDocuments();
+
+  // total pages
+  const totalPage = Math.ceil(totalProducts / limit);
+  return res
+    .status(200)
+    .send({ message: "success", productList: products, totalPage });
+});
 export default router;

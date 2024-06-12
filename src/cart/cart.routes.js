@@ -228,7 +228,7 @@ router.get("/cart/item/list", isUser, async (req, res) => {
   ]);
 
   let allProductSubTotal = 0;
-  let discountPercent = 10;
+  let discountPercent = 7;
   let discountAmount = 0;
   let grandTotal = 0;
 
@@ -258,7 +258,6 @@ router.get("/cart/item/count", isUser, async (req, res) => {
   const cartItemCount = await Cart.find({
     userId: loggedInUserId
   }).countDocuments();
-
   return res
     .status(200)
     .send({ message: "success", cartItemCount: cartItemCount });

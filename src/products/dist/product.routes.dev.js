@@ -380,5 +380,104 @@ router.post("/product/list/admin", _authenticationMiddleware.isAdmin, (0, _valid
     }
   });
 });
+router.post("/product/list", function _callee7(req, res) {
+  var _req$body3, page, limit, searchText, category, minPrice, maxPrice, skip, match, products, totalProducts, totalPage;
+
+  return regeneratorRuntime.async(function _callee7$(_context7) {
+    while (1) {
+      switch (_context7.prev = _context7.next) {
+        case 0:
+          // extract pagination data from req.body
+          _req$body3 = req.body, page = _req$body3.page, limit = _req$body3.limit, searchText = _req$body3.searchText, category = _req$body3.category, minPrice = _req$body3.minPrice, maxPrice = _req$body3.maxPrice;
+          console.log({
+            page: page,
+            limit: limit,
+            searchText: searchText,
+            category: category,
+            minPrice: minPrice,
+            maxPrice: maxPrice
+          });
+          skip = (page - 1) * limit;
+          match = {};
+
+          if (searchText) {
+            match = {
+              name: {
+                $regex: searchText,
+                $options: "i"
+              }
+            };
+          }
+
+          if (category) {
+            match = _objectSpread({}, match, {
+              category: category
+            });
+          }
+
+          if (!(minPrice && maxPrice && maxPrice < minPrice)) {
+            _context7.next = 8;
+            break;
+          }
+
+          return _context7.abrupt("return", res.status(409).send({
+            message: "Min price cannot be greater than max price."
+          }));
+
+        case 8:
+          if (minPrice || maxPrice) {
+            match = _objectSpread({}, match, {
+              price: {
+                $gte: minPrice,
+                $lte: maxPrice
+              }
+            });
+          }
+
+          console.log(match);
+          _context7.next = 12;
+          return regeneratorRuntime.awrap(_productModel["default"].aggregate([{
+            $match: match
+          }, {
+            $skip: skip
+          }, {
+            $limit: limit
+          }, {
+            $project: {
+              name: 1,
+              brand: 1,
+              price: 1,
+              category: 1,
+              freeShipping: 1,
+              availableQuantity: 1,
+              description: {
+                $substr: ["$description", 0, 200]
+              },
+              image: 1
+            }
+          }]));
+
+        case 12:
+          products = _context7.sent;
+          _context7.next = 15;
+          return regeneratorRuntime.awrap(_productModel["default"].find(match).countDocuments());
+
+        case 15:
+          totalProducts = _context7.sent;
+          // total pages
+          totalPage = Math.ceil(totalProducts / limit);
+          return _context7.abrupt("return", res.status(200).send({
+            message: "success",
+            productList: products,
+            totalPage: totalPage
+          }));
+
+        case 18:
+        case "end":
+          return _context7.stop();
+      }
+    }
+  });
+});
 var _default = router;
 exports["default"] = _default;
