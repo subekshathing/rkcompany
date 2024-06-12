@@ -54,7 +54,7 @@ export const paginationValidationSchema = Yup.object({
   searchText: Yup.string().nullable()
 });
 
-export const listProductByBuyerValidationSchema = Yup.object({
+export const listProductByUserValidationSchema = Yup.object({
   page: Yup.number()
     .min(1, "Page must be at least 1.")
     .required("Page is required."),

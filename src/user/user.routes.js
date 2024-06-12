@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import {
   loginUserValidationSchema,
-  registerUserValidationSchema,
+  registerUserValidationSchema
 } from "./user.validation.js";
 import User from "./user.model.js";
 import bcrypt from "bcrypt";
@@ -12,8 +12,6 @@ import jwt from "jsonwebtoken";
 const router = Router();
 
 // register user
-// its just creating a new user
-// forget not: to hash password before saving user into db
 router.post(
   "/user/register",
   validateReqBody(registerUserValidationSchema),
@@ -81,7 +79,6 @@ router.post(
 
     // generate access token
     const payload = { email: user.email };
-
     const token = jwt.sign(payload, process.env.ACCESS_TOKEN_SIGNATURE);
 
     // to hide password

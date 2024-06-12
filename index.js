@@ -3,6 +3,7 @@ import connectDB from "./connect.db.js";
 import userRoutes from "./src/user/user.routes.js";
 import productRoutes from "./src/products/product.routes.js";
 import cartRoutes from "./src/cart/cart.routes.js";
+import cors from "cors";
 
 const app = express();
 
@@ -12,12 +13,12 @@ app.use(express.json());
 // enable cors
 // Cross origin Resource Sharing
 
-// const corsOptions = {
-//   origin: "*",
-//   optionsSuccessStatus: 200,
-// };
+const corsOptions = {
+  origin: "*",
+  optionsSuccessStatus: 200
+};
 
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 
 // connect database
 connectDB();

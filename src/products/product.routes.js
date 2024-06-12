@@ -5,7 +5,7 @@ import validateReqBody from "../middlewares/validation.middleware.js";
 import Product from "./product.model.js";
 import {
   addProductValidationSchema,
-  listProductByBuyerValidationSchema,
+  listProductByUserValidationSchema,
   paginationValidationSchema
 } from "./product.validation.js";
 import { isAdmin, isUser } from "../middlewares/authentication.middleware.js";
@@ -13,11 +13,6 @@ import { isAdmin, isUser } from "../middlewares/authentication.middleware.js";
 const router = express.Router();
 
 // add product
-// steps:
-// 1.logged in user must be seller
-// 2.validate req body
-// 3.create product
-
 router.post(
   "/product/add",
   isAdmin,
@@ -28,11 +23,7 @@ router.post(
 
     // extract loggedInUserId
     const loggedInUserId = req.loggedInUserId;
-
     newProduct.adminId = loggedInUserId;
-
-    // change price to lowest unit i.e paisa, cent
-    // newProduct.price = newProduct.price * 100;
 
     // create product
     await Product.create(newProduct);
@@ -81,13 +72,9 @@ router.delete(
 
     // check product ownership
 
-    // to be product owner: product sellerId must be equal to logged in user id
+    // to be product owner: product adminId must be equal to logged in user id
     const adminId = product.adminId;
-
     const loggedInUserId = req.loggedInUserId;
-
-    // const isProductOwner = String(sellerId) === String(loggedInUserId);
-    // alternative code
     const isProductOwner = adminId.equals(loggedInUserId);
 
     // if not product owner, throw error
@@ -126,7 +113,7 @@ router.put(
     }
 
     // check for product ownership
-    // product's sellerId must be same with loggedInUserId
+    // product's adminId must be same with loggedInUserId
     const productOwnerId = product.adminId;
     const loggedInUserId = req.loggedInUserId;
 
@@ -141,9 +128,6 @@ router.put(
 
     // extract newValues from req.body
     const newValues = req.body;
-
-    // change price to lowest unit i.e paisa, cent
-    // newValues.price = newValues.price * 100;
 
     // edit product
     await Product.updateOne(
@@ -166,7 +150,7 @@ router.put(
 router.post(
   "/product/list/user",
   isUser,
-  validateReqBody(listProductByBuyerValidationSchema),
+  validateReqBody(listProductByUserValidationSchema),
   async (req, res) => {
     // extract pagination data from req.body
     const { page, limit, searchText, category, minPrice, maxPrice } = req.body;
@@ -269,7 +253,7 @@ router.post(
 
     // calculate page
     const totalProducts = await Product.find({
-      sellerId: req.loggedInUserId
+      adminId: req.loggedInUserId
     }).countDocuments();
 
     // total page

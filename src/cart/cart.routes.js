@@ -44,7 +44,7 @@ router.post(
       });
     }
 
-    // find cart using productId and buyerId
+    // find cart using productId and userId
     const cartItem = await Cart.findOne({
       userId: req.loggedInUserId,
       productId: cartData.productId
@@ -118,7 +118,7 @@ router.put(
     // extract productId from req.params
     const productId = req.params.id;
 
-    // extract buyerId from req.loggedInUserId
+    // extract userId from req.loggedInUserId
     const userId = req.loggedInUserId;
 
     // extract action from req.body
@@ -187,7 +187,7 @@ router.put(
 
 // list cart items
 router.get("/cart/item/list", isUser, async (req, res) => {
-  // extract buyerId from req.loggedInUserId
+  // extract userId from req.loggedInUserId
   const userId = req.loggedInUserId;
 
   const cartData = await Cart.aggregate([
@@ -228,7 +228,7 @@ router.get("/cart/item/list", isUser, async (req, res) => {
   ]);
 
   let allProductSubTotal = 0;
-  let discountPercent = 5; // 5 percent flat discount
+  let discountPercent = 10;
   let discountAmount = 0;
   let grandTotal = 0;
 
@@ -236,7 +236,7 @@ router.get("/cart/item/list", isUser, async (req, res) => {
     allProductSubTotal = allProductSubTotal + item.subTotal;
   });
 
-  discountAmount = 0.05 * allProductSubTotal;
+  discountAmount = (discountPercent / 100) * allProductSubTotal;
 
   grandTotal = allProductSubTotal - discountAmount;
 

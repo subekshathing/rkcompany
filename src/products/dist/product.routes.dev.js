@@ -26,10 +26,6 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var router = _express["default"].Router(); // add product
-// steps:
-// 1.logged in user must be seller
-// 2.validate req body
-// 3.create product
 
 
 router.post("/product/add", _authenticationMiddleware.isAdmin, (0, _validationMiddleware["default"])(_productValidation.addProductValidationSchema), function _callee(req, res) {
@@ -42,9 +38,7 @@ router.post("/product/add", _authenticationMiddleware.isAdmin, (0, _validationMi
           newProduct = req.body; // extract loggedInUserId
 
           loggedInUserId = req.loggedInUserId;
-          newProduct.adminId = loggedInUserId; // change price to lowest unit i.e paisa, cent
-          // newProduct.price = newProduct.price * 100;
-          // create product
+          newProduct.adminId = loggedInUserId; // create product
 
           _context.next = 5;
           return regeneratorRuntime.awrap(_productModel["default"].create(newProduct));
@@ -130,11 +124,9 @@ router["delete"]("/product/delete/:id", _authenticationMiddleware.isAdmin, _vali
 
         case 6:
           // check product ownership
-          // to be product owner: product sellerId must be equal to logged in user id
+          // to be product owner: product adminId must be equal to logged in user id
           adminId = product.adminId;
-          loggedInUserId = req.loggedInUserId; // const isProductOwner = String(sellerId) === String(loggedInUserId);
-          // alternative code
-
+          loggedInUserId = req.loggedInUserId;
           isProductOwner = adminId.equals(loggedInUserId); // if not product owner, throw error
 
           if (isProductOwner) {
@@ -191,7 +183,7 @@ router.put("/product/edit/:id", _authenticationMiddleware.isAdmin, _validateIdMi
 
         case 6:
           // check for product ownership
-          // product's sellerId must be same with loggedInUserId
+          // product's adminId must be same with loggedInUserId
           productOwnerId = product.adminId;
           loggedInUserId = req.loggedInUserId;
           isProductOwner = productOwnerId.equals(loggedInUserId); // if not owner of product, throw error
@@ -207,9 +199,7 @@ router.put("/product/edit/:id", _authenticationMiddleware.isAdmin, _validateIdMi
 
         case 11:
           // extract newValues from req.body
-          newValues = req.body; // change price to lowest unit i.e paisa, cent
-          // newValues.price = newValues.price * 100;
-          // edit product
+          newValues = req.body; // edit product
 
           _context4.next = 14;
           return regeneratorRuntime.awrap(_productModel["default"].updateOne({
@@ -231,7 +221,7 @@ router.put("/product/edit/:id", _authenticationMiddleware.isAdmin, _validateIdMi
   });
 }); // list product by user
 
-router.post("/product/list/user", _authenticationMiddleware.isUser, (0, _validationMiddleware["default"])(_productValidation.listProductByBuyerValidationSchema), function _callee5(req, res) {
+router.post("/product/list/user", _authenticationMiddleware.isUser, (0, _validationMiddleware["default"])(_productValidation.listProductByUserValidationSchema), function _callee5(req, res) {
   var _req$body, page, limit, searchText, category, minPrice, maxPrice, skip, match, products, totalProducts, totalPage;
 
   return regeneratorRuntime.async(function _callee5$(_context5) {
@@ -370,7 +360,7 @@ router.post("/product/list/admin", _authenticationMiddleware.isAdmin, (0, _valid
           products = _context6.sent;
           _context6.next = 7;
           return regeneratorRuntime.awrap(_productModel["default"].find({
-            sellerId: req.loggedInUserId
+            adminId: req.loggedInUserId
           }).countDocuments());
 
         case 7:

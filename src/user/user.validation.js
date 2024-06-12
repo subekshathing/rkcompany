@@ -25,13 +25,13 @@ export const registerUserValidationSchema = Yup.object({
     .required("PhoneNumber is required."),
   role: Yup.string()
     .trim()
-    .oneOf(["admin", "member"], "Role must be either admin or member."),
+    .oneOf(["admin", "user"], "Role must be either admin or user."),
   gender: Yup.string()
     .trim()
     .oneOf(
       ["male", "female", "preferNotToSay"],
       "Gender must be either male or female or preferNotToSay."
-    ),
+    )
 });
 
 export const loginUserValidationSchema = Yup.object({
@@ -40,5 +40,5 @@ export const loginUserValidationSchema = Yup.object({
     .trim()
     .email("Must be a valid email address.")
     .lowercase(),
-  password: Yup.string().required("Password is required."),
+  password: Yup.string().required("Password is required.")
 });
