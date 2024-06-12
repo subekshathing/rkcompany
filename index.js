@@ -2,6 +2,7 @@ import express from "express";
 import connectDB from "./connect.db.js";
 import userRoutes from "./src/user/user.routes.js";
 import productRoutes from "./src/products/product.routes.js";
+import cartRoutes from "./src/cart/cart.routes.js";
 
 const app = express();
 
@@ -24,7 +25,7 @@ connectDB();
 // register routes
 app.use(userRoutes);
 app.use(productRoutes);
-// app.use(cartRoutes);
+app.use(cartRoutes);
 
 // network port and server
 const PORT = process.env.API_PORT;
