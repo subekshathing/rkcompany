@@ -24,19 +24,15 @@ const productSchema = new mongoose.Schema(
       type: String,
       trim: true,
       enum: [
-        "grocery",
-        "electronics",
-        "furniture",
-        "electrical",
-        "kitchen",
-        "kids",
-        "sports",
-        "auto",
-        "clothes",
-        "shoes",
-        "pharmaceuticals",
-        "stationery",
-        "cosmetics"
+        "feed",
+        "medicine",
+        "insectiside",
+        "pestiside",
+        "seed",
+        "fertilizer",
+        "vitamin",
+        "mineral",
+        "tools"
       ]
     },
     freeShipping: {

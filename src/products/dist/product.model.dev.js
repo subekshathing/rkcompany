@@ -31,7 +31,7 @@ var productSchema = new _mongoose["default"].Schema({
   category: {
     type: String,
     trim: true,
-    "enum": ["grocery", "electronics", "furniture", "electrical", "kitchen", "kids", "sports", "auto", "clothes", "shoes", "pharmaceuticals", "stationery", "cosmetics"]
+    "enum": ["feed", "medicine", "insectiside", "pestiside", "seed", "fertilizer", "vitamin", "mineral", "tools"]
   },
   freeShipping: {
     type: Boolean,
