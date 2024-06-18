@@ -14,7 +14,7 @@ app.use(express.json());
 // Cross origin Resource Sharing
 
 const corsOptions = {
-  origin: "https://rkcompany-ui.vercel.app/",
+  origin: "https://rkcompany-ui.vercel.app",
   optionsSuccessStatus: 200
 };
 
