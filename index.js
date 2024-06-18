@@ -15,7 +15,10 @@ app.use(express.json());
 
 const corsOptions = {
   origin: "https://rkcompany-ui.vercel.app",
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
+  methods: "GET, POST, OPTIONS, PUT, PATCH, DELETE",
+  allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept",
+  credentials: true
 };
 
 app.use(cors(corsOptions));
