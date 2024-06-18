@@ -17,7 +17,7 @@ const corsOptions = {
   origin: "https://rkcompany-ui.vercel.app",
   optionsSuccessStatus: 200,
   methods: "GET, POST, OPTIONS, PUT, PATCH, DELETE",
-  allowedHeaders: "Origin, X-Requested-With, Content-Type, Accept",
+  allowedHeaders: "Content-Type, Authorization",
   credentials: true
 };
 
