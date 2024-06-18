@@ -14,11 +14,8 @@ app.use(express.json());
 // Cross origin Resource Sharing
 
 const corsOptions = {
-  origin: "https://rkcompany-ui.vercel.app",
-  optionsSuccessStatus: 200,
-  methods: "GET, POST, OPTIONS, PUT, PATCH, DELETE",
-  allowedHeaders: "Content-Type, Authorization",
-  credentials: true
+  origin: "*",
+  optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));

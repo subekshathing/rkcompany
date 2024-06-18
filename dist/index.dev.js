@@ -20,11 +20,8 @@ app.use(_express["default"].json()); // enable cors
 // Cross origin Resource Sharing
 
 var corsOptions = {
-  origin: "https://rkcompany-ui.vercel.app",
-  optionsSuccessStatus: 200,
-  methods: "GET, POST, OPTIONS, PUT, PATCH, DELETE",
-  allowedHeaders: "Content-Type, Authorization",
-  credentials: true
+  origin: "*",
+  optionsSuccessStatus: 200
 };
 app.use((0, _cors["default"])(corsOptions)); // connect database
 
