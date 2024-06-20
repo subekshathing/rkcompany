@@ -14,9 +14,7 @@ app.use(express.json());
 // Cross origin Resource Sharing
 
 const corsOptions = {
-  origin: ["https://raksirangk-pfirm-ui.vercel.app"],
-  methods: "GET,PUT,POST,DELETE",
-  credentials: true,
+  origin: "*",
   optionsSuccessStatus: 200
 };
 
