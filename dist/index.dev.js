@@ -20,7 +20,9 @@ app.use(_express["default"].json()); // enable cors
 // Cross origin Resource Sharing
 
 var corsOptions = {
-  origin: "*",
+  origin: ["https://raksirangk-pfirm-ui.vercel.app"],
+  methods: "GET,PUT,POST,DELETE",
+  credentials: true,
   optionsSuccessStatus: 200
 };
 app.use((0, _cors["default"])(corsOptions)); // connect database
